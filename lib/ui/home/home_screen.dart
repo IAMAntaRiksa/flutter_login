@@ -8,11 +8,14 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text('Welcome'),
-          ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text('Welcome',
+                  style: TextStyle(color: Colors.green, fontSize: 30))
+            ],
+          ),
         ),
       ),
     );

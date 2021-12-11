@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:login_flutter/bloc/login_bloc.dart';
 import 'package:login_flutter/ui/login/login_screen.dart';
 
 void main() => runApp(const MyApp());
@@ -8,8 +10,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: LoginScreen(),
+    return BlocProvider(
+      create: (context) => LoginBloc(),
+      child: MaterialApp(
+        home: LoginScreen(),
+      ),
     );
   }
 }
