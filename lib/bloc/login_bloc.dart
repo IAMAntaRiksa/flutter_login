@@ -21,13 +21,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           email: event.email, password: event.password);
       String token = prefs.setString('token', auth ?? '').toString();
       prefs.getString('token');
-      if(token.isEmpty){
-        token.isEmpty(){
-          toke(){
-            
-          }
-        }
-      }
+      if (token.isEmpty) {}
     } catch (e) {
       emit(const LoginError(message: 'Error Data Login'));
     }

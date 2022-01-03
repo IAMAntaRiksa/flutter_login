@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_flutter/bloc/login_bloc.dart';
-import 'package:login_flutter/ui/home/home_screen.dart';
-import 'package:login_flutter/ui/login/register.dart';
+import 'package:login_flutter/ui/screen/dashboard/dashboard_screen.dart';
 import 'package:login_flutter/values/style.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
+  static const String routeName = '/';
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late TextEditingController usernameController;
-  late TextEditingController passwordController;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   void initState() {
     usernameController = TextEditingController();
     passwordController = TextEditingController();
+    passwordController.clear();
+    usernameController.clear();
     super.initState();
   }
 
@@ -27,19 +30,25 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocProvider<LoginBloc>(
       create: (context) => LoginBloc(),
       child: BlocConsumer<LoginBloc, LoginState>(
-        listener: (context, state) {
+        listener: (_, state) {
           if (state is LoginSuccsess) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-            );
+            Navigator.pushReplacementNamed(_, DashboardScreen.routeName);
           } else if (state is LoginError) {
-            const LoginError(message: 'error login coba lagi');
+            showDialog(
+              context: context,
+              builder: (context) {
+                return const AlertDialog(
+                  title: Text('Material Dialog'),
+                  content: Text('Hey! I am Coflutter!'),
+                );
+              },
+            );
           }
         },
         builder: (context, state) {
           return Scaffold(
-            body: SingleChildScrollView(
+            body: Form(
+              key: _formKey,
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
@@ -54,25 +63,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 36, horizontal: 24),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text('Login', style: textFonts),
-                              SizedBox(height: 20),
-                              Text('Simple UI Login', style: textFontses),
-                            ],
-                          ),
-                        ),
+                      const Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 36, horizontal: 24),
+                        child: Text('Login', style: textFonts),
                       ),
                       Expanded(
-                        flex: 5,
+                        flex: 2,
                         child: Container(
+                          height: double.infinity,
                           width: double.infinity,
                           decoration: const BoxDecoration(
                             color: Colors.white,
@@ -85,11 +84,26 @@ class _LoginScreenState extends State<LoginScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: ClipRRect(
+                                  child: Image.asset(
+                                    'assets/images/logo.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
                               Padding(
                                 padding:
                                     const EdgeInsets.only(left: 20, right: 20),
                                 child: TextFormField(
                                   controller: usernameController,
+                                  validator: (e) {
+                                    if (e?.isEmpty ?? true) {
+                                      return 'masukan email';
+                                    }
+                                  },
+                                  obscureText: false,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
@@ -109,8 +123,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 padding:
                                     const EdgeInsets.only(right: 20, left: 20),
                                 child: TextFormField(
-                                  controller: passwordController,
+                                  validator: (e) {
+                                    if (e?.isEmpty ?? false) {
+                                      return 'masukan password';
+                                    }
+                                  },
                                   obscureText: true,
+                                  controller: passwordController,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(6),
@@ -133,16 +152,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.blue,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      context.read<LoginBloc>().add(
-                                          GetLoginEvent(
-                                              username: usernameController.text,
-                                              password:
-                                                  passwordController.text));
-                                      // BlocProvider.of<LoginBloc>(context).add(
-                                      //     GetLoginEvent(
-                                      //         username: usernameController.text,
-                                      //         password:
-                                      //             passwordController.text));
+                                      if (_formKey.currentState?.validate() ??
+                                          true) {
+                                        context.read<LoginBloc>().add(
+                                              GetLoginEvent(
+                                                  email:
+                                                      usernameController.text,
+                                                  password:
+                                                      passwordController.text),
+                                            );
+                                      }
                                     },
                                     child: const Padding(
                                       padding:
@@ -162,12 +181,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.blue,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const RegisterUser()),
-                                      );
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) =>
+                                      //           const RegisterUser()),
+                                      // );
                                     },
                                     child: const Padding(
                                       padding:
