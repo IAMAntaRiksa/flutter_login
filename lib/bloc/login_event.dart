@@ -7,11 +7,11 @@ class LoginEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetLoginEvent extends LoginEvent {
+class CsloginEvent extends LoginEvent {
   final String email;
   final String password;
 
-  const GetLoginEvent({
+  const CsloginEvent({
     required this.email,
     required this.password,
   });
@@ -19,3 +19,7 @@ class GetLoginEvent extends LoginEvent {
   @override
   List<Object> get props => [email, password];
 }
+
+class LogOutEvent extends LoginEvent {}
+
+class CheckLoginEvent extends LoginEvent {}

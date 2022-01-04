@@ -10,54 +10,53 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final int _selectedIndex = 0;
+  int _selectedIndexBody = 0;
+
   final List<Widget> _dashboardBodyWidgets = <Widget>[
     const HomeScreen(),
-    const Placeholder(color: Colors.blue),
     const Placeholder(color: Colors.green),
     const Placeholder(color: Colors.black),
+    const Placeholder(color: Colors.green),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _dashboardBodyWidgets[1],
+      // body: _dashboardBodyWidgets[_selectedIndexBody],
+      body: IndexedStack(
+        index: _selectedIndexBody,
+        children: _dashboardBodyWidgets,
+      ),
       bottomNavigationBar: BottomNavigationBar(
-          showUnselectedLabels: false,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          type: BottomNavigationBarType.fixed,
-          items: _mainMenuItems(),
-          currentIndex: _selectedIndex
-          // selectedLabelStyle: selectedMainMenuStyle,
-          // unselectedLabelStyle: unselectedMainMenuStyle,
-          ),
+        elevation: 0,
+        selectedItemColor: Colors.amber[800],
+        type: BottomNavigationBarType.fixed,
+        items: _mainMenuItems(),
+        currentIndex: _selectedIndexBody,
+        onTap: (index) {
+          setState(() {
+            _selectedIndexBody = index;
+          });
+        },
+        showUnselectedLabels: true,
+        showSelectedLabels: true,
+      ),
     );
   }
 
   List<BottomNavigationBarItem> _mainMenuItems() {
     return <BottomNavigationBarItem>[
       _mainMenuItemWidget('Home', Icons.home),
-      _mainMenuItemWidget('Search', Icons.search),
-      _mainMenuItemWidget('Favorite', Icons.favorite),
-      _mainMenuItemWidget('Profile', Icons.person),
+      _mainMenuItemWidget('Mid', Icons.ac_unit_rounded),
+      _mainMenuItemWidget('Faforite', Icons.favorite),
     ];
   }
 
   BottomNavigationBarItem _mainMenuItemWidget(
       String menuTitle, IconData iconData) {
     return BottomNavigationBarItem(
-      activeIcon: Padding(
-        padding: const EdgeInsets.only(top: 14.0, bottom: 14.0),
-        child: Icon(
-          iconData,
-          color: Colors.yellowAccent,
-        ),
-      ),
-      icon: Padding(
-        padding: const EdgeInsets.only(top: 14.0, bottom: 14.0),
-        child: Icon(iconData, color: Colors.blue),
-      ),
+      activeIcon: Icon(iconData),
+      icon: Icon(iconData),
       label: menuTitle,
     );
   }

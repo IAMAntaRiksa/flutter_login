@@ -155,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       if (_formKey.currentState?.validate() ??
                                           true) {
                                         context.read<LoginBloc>().add(
-                                              GetLoginEvent(
+                                              CsloginEvent(
                                                   email:
                                                       usernameController.text,
                                                   password:
