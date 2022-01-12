@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:login_flutter/bloc/bloc/pendaftaran_bloc.dart';
 import 'package:login_flutter/bloc/login_bloc.dart';
 import 'package:login_flutter/routes/routes.dart';
 
@@ -10,8 +11,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LoginBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<LoginBloc>(
+          create: (context) => LoginBloc(),
+        ),
+        BlocProvider(
+          create: (context) => PendaftaranBloc(),
+        ),
+      ],
       child: const MaterialApp(
         onGenerateRoute: Routes.generateRoute,
       ),

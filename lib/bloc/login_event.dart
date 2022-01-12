@@ -20,6 +20,4 @@ class CsloginEvent extends LoginEvent {
   List<Object> get props => [email, password];
 }
 
-class LogOutEvent extends LoginEvent {}
-
-class CheckLoginEvent extends LoginEvent {}
+class InitAppCheckLogIng extends LoginEvent {}
